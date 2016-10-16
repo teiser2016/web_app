@@ -21,16 +21,18 @@
     <div id="map"></div>
     <script>
         
+        //initialize map
         function initMap() {
             var map = new google.maps.Map(document.getElementById('map'), {
                 zoom: 16,
                 center: {lat: 41.087236, lng: 23.547780}
             });
 
+            //setting markers on the map
             setMarkers(map);
         }
 
-        // Data for the markers consisting of a name, a LatLng and a zIndex for the
+        // Data for the markers consisting of a name, an adrress, a LatLng and a zIndex for the
         // order in which these markers should display on top of each other.
         var myLocs = [
             ['nomarxia', 'merarxias', 41.087672, 23.547790, 6],
@@ -41,6 +43,8 @@
             ['ntomata', 'anapausews 7', 41.098007, 23.554817, 1]
         ];
         
+        //create string of name+address of the current location and display
+        //as current location we use the first element in the myLocs array
         var curLocString = myLocs[0][0].toString() + ', ' + myLocs[0][1];
         var currentLocation = document.getElementById("currentLocDisplay");
         currentLocation.value = curLocString;
@@ -58,7 +62,7 @@
             }
         }
         
-        //var nearLocString = myLocs[0][0].toString() + ', ' + myLocs[0][1];
+        //create string of name+address of the nearest location and display
         var nearLocString = myLocs[ findNearestMarker() ][0].toString() + ', ' + myLocs[ findNearestMarker() ][1].toString();
         var nearestLocation = document.getElementById("nearestLocDisplay");
         nearestLocation.value = nearLocString;
@@ -69,9 +73,12 @@
             var pos=1;
             //initialize distance
             var distance = dist( curLoc[2], curLoc[3], myLocs[1][2], myLocs[1][3]);
+            //compare the distance between every location in myLocs array and the current location 
+            //and find which one is nearest
             for(var i=2; i<myLocs.length; i++){
                 if( dist( curLoc[2], curLoc[3], myLocs[i][2], myLocs[i][3]) < distance ){
                     distance = dist( curLoc[2], curLoc[3], myLocs[i][2], myLocs[i][3]);
+                    //keep the position of the nearest location
                     pos=i;
                 }
             }
@@ -79,6 +86,8 @@
             return pos;
         }
         
+        //calculates the distance between two locations
+        //parameters : coordinates of each location
         function dist(lat1, lng1, lat2, lng2) {
             var p = 0.017453292519943295;    // Math.PI / 180
             var c = Math.cos;
