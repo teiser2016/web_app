@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Simple markers</title>
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+      <h3><label>My Current Location : </label><input type="text" id="currentLocDisplay" value=""></h3>
+      <h3><label>Nearest Location : </label><input type="text" id="nearestLocDisplay" value=""></h3>
+    <div id="map"></div>
+    <script>
+        
+        function initMap() {
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 16,
+                center: {lat: 41.087236, lng: 23.547780}
+            });
+
+            setMarkers(map);
+        }
+
+        // Data for the markers consisting of a name, a LatLng and a zIndex for the
+        // order in which these markers should display on top of each other.
+        var myLocs = [
+            ['Addr1', 41.087672, 23.547790, 4],
+            ['Addr2', 41.087818, 23.546138, 5],
+            ['Addr3', 41.087236, 23.544883, 3],
+            ['Addr4', 41.086613, 23.545634, 2],
+            ['Addr5', 41.087236, 23.547780, 1]
+        ];
+        
+        var currentLocation = document.getElementById("currentLocDisplay");
+        currentLocation.value = myLocs[0][0];
+
+        function setMarkers(map) {
+            // Adds markers to the map.
+            for (var i = 0; i < myLocs.length; i++) {
+                var myLocation = myLocs[i];
+                var marker = new google.maps.Marker({
+                    position: {lat: myLocation[1], lng: myLocation[2]},
+                    map: map,
+                    title: myLocation[0],
+                    zIndex: myLocation[3]
+                });
+            }
+        }
+        
+        var nearestLocation = document.getElementById("nearestLocDisplay");
+        //nearestLocation.value = myLocs[findNearestMarker()][0];
+        nearestLocation.value = findNearestMarker(myLocs);
+        
+        function findNearestMarker(myArray){
+            var curLoc = {lat: myArray[0][1], lng: myArray[0][2]};
+            //initialize position of nearest location
+            var pos=1;
+            //initialize distance
+            var distance = dist(curLoc.lat, curLoc.lng, myArray[1][1], myArray[1][2]);
+            
+            for(var i=2; i<myArray.length(); i++){
+                if( dist(curLoc.lat, curLoc.lng, myArray[i][1], myArray[i][2]) < distance ){
+                    distance = dist(curLoc.lat, curLoc.lng, myArray[i][1], myArray[i][2]);
+                    pos=i;
+                }
+            }
+            //return position of nearest location in myArray
+            return pos;
+        }
+        
+              
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxP3PmefhR1i7rmsm0SeNyQGtMXaGcFXM&callback=initMap">
+    </script>
+  </body>
+</html>
